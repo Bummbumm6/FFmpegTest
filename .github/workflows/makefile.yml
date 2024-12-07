@@ -14,14 +14,100 @@ jobs:
 
     steps:
       - name: Install prebuilt libraries
-        run: yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel git man-pages asciidoc docbook-dtds man-db xmlto -y
+        run: |
+          yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel git man-pages asciidoc docbook-dtds man-db xmlto -y
       - name: Build NASM
-        run: cd ~/ && git clone https://github.com/netwide-assembler/nasm && cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make all nasm.1 ndisasm.1 && make install && yum remove nasm
+        run: |
+          cd ~/
+          git clone https://github.com/netwide-assembler/nasm
+          cd ~/nasm
+          ./autogen.sh
+          ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+          make
+          make all nasm.1 ndisasm.1
+          make install
+          yum remove nasm
       - name: Build YASM
-        run: cd ~/ && git clone https://github.com/yasm/yasm && cd ~/yasm && ~/yasm/autogen.sh && ~/yasm/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
+        run: |
+          cd ~/
+          git clone https://github.com/yasm/yasm
+          cd ~/yasm
+          ~/yasm/autogen.sh
+          ~/yasm/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
+          make
+          make install
       - name: Build libx264
-        run: cd ~/ && git clone --branch stable --depth 1 https://code.videolan.org/videolan/x264.git && cd ~/x264 && PATH=$PATH:$HOME/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static && PATH=$PATH:$HOME/bin make && PATH=$PATH:$HOME/bin make install
+        run: |
+          cd ~/
+          git clone --branch stable --depth 1 https://code.videolan.org/videolan/x264.git
+          cd ~/x264
+          PATH=$PATH:$HOME/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
       - name: Build libx265
-        run: cd ~/ && git clone --branch stable --depth 2 https://bitbucket.org/multicoreware/x265_git && cd ~/x265_git/build/linux && PATH=$PATH:$HOME/bin cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ~/x265_git/source && PATH=$PATH:$HOME/bin make && PATH=$PATH:$HOME/bin make install
+        run: |
+          cd ~/
+          git clone --branch stable --depth 2 https://bitbucket.org/multicoreware/x265_git
+          cd ~/x265_git/build/linux
+          PATH=$PATH:$HOME/bin cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ~/x265_git/source
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
       - name: Build libfdk_aac
-        run: cd ~/ && git clone --depth 1 https://github.com/mstorsjo/fdk-aac && cd ~/fdk-aac && PATH=$PATH:$HOME/bin autoreconf -fiv && PATH=$PATH:$HOME/bin ~/fdk-aac/configure --prefix="$HOME/ffmpeg_build" --disable-shared && PATH=$PATH:$HOME/bin make && PATH=$PATH:$HOME/bin make install
+        run: |
+          cd ~/
+          git clone --depth 1 https://github.com/mstorsjo/fdk-aac
+          cd ~/fdk-aac
+          PATH=$PATH:$HOME/bin autoreconf -fiv
+          PATH=$PATH:$HOME/bin ~/fdk-aac/configure --prefix="$HOME/ffmpeg_build" --disable-shared
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
+      - name: Build libmp3lame
+        run: |
+          cd ~/
+          git clone https://github.com/despoa/LAME
+          cd LAME
+          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --disable-shared --enable-nasm
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
+      - name: Build libopus
+        run: |
+          cd ~/
+          git clone https://github.com/xiph/opus
+          cd opus
+          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
+      - name: Build libvpx
+        run: |
+          cd ~/
+          git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git
+          cd libvpx
+          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
+      - name: Build FFmpeg
+        run: |
+          cd ~
+          curl -O -L https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+          tar xjvf ffmpeg-snapshot.tar.bz2
+          cd ffmpeg
+          PATH=$PATH:$HOME/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+            --prefix="$HOME/ffmpeg_build" \
+            --pkg-config-flags="--static" \
+            --extra-cflags="-I$HOME/ffmpeg_build/include" \
+            --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+            --extra-libs=-lpthread \
+            --extra-libs=-lm \
+            --bindir="$HOME/bin" \
+            --enable-gpl \
+            --enable-libfdk_aac \
+            --enable-libfreetype \
+            --enable-libharfbuzz \
+            --enable-libmp3lame \
+            --enable-libopus \
+            --enable-libvpx \
+            --enable-libx264 \
+            --enable-libx265 \
+            --enable-nonfree
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
