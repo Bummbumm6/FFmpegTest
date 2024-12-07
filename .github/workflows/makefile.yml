@@ -19,6 +19,8 @@ jobs:
         run: cd ~/ && git clone https://github.com/netwide-assembler/nasm
       - name: (Deps) Install NASM
         run: cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make all nasm.1 ndisasm.1 && make install
+      - name: (Deps) Remove repo NASM
+        run: yum remove nasm && hash -d nasm
       - name: (Deps) Download YASM
         run: cd ~/ && git clone https://github.com/yasm/yasm
       - name: (Deps) Install YASM
