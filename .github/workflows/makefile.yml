@@ -13,13 +13,21 @@ jobs:
     container: fedora:41
 
     steps:
-      - name: Install deps
+      - name: (Deps) Libraries
         run: yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel git man-pages asciidoc docbook-dtds man-db xmlto -y
-      - name: Download NASM
+      - name: (Deps) Download NASM
         run: cd ~/ && git clone https://github.com/netwide-assembler/nasm
-      - name: Install NASM
+      - name: (Deps) Install NASM
         run: cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make all nasm.1 ndisasm.1 && make install
-      - name: Download YASM
+      - name: (Deps) Download YASM
         run: cd ~/ && git clone https://github.com/yasm/yasm
-      - name: Install YASM
+      - name: (Deps) Install YASM
         run: cd ~/yasm && ~/yasm/autogen.sh && ~/yasm/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
+      - name: (Deps) Download libx264
+        run: cd ~/ && git clone --branch stable --depth 1 https://code.videolan.org/videolan/x264.git
+      - name: (Deps) Install libx264
+        run: cd ~/x264 && PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static && make && make install
+      - name: (Deps) Download libx265
+        run: cd ~/ && git clone --branch stable --depth 2 https://bitbucket.org/multicoreware/x265_git
+      - name: (Deps) Install libx265
+        run: cd ~/x265_git/build/linux && cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ~/x265_git/source && make && make install
