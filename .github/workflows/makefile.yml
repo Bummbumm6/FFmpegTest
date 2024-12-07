@@ -28,8 +28,8 @@ jobs:
       - name: (Deps) Download libx264
         run: cd ~/ && git clone --branch stable --depth 1 https://code.videolan.org/videolan/x264.git
       - name: (Deps) Install libx264
-        run: cd ~/x264 && PATH=$PATH:/github/home/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static && make && make install
+        run: cd ~/x264 && PATH=$PATH:/github/home/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static && PATH=$PATH:/github/home/bin make && PATH=$PATH:/github/home/bin make install
       - name: (Deps) Download libx265
         run: cd ~/ && git clone --branch stable --depth 2 https://bitbucket.org/multicoreware/x265_git
       - name: (Deps) Install libx265
-        run: cd ~/x265_git/build/linux && cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ~/x265_git/source && make && make install
+        run: cd ~/x265_git/build/linux && PATH=$PATH:/github/home/bin cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ~/x265_git/source && PATH=$PATH:/github/home/bin make && PATH=$PATH:/github/home/bin make install
