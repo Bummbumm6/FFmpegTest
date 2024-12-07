@@ -14,11 +14,11 @@ jobs:
 
     steps:
       - name: Install deps
-        run: yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel git asciidoc -y
+        run: yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel git asciidoc man-pages -y
       - name: Download NASM
         run: cd ~/ && git clone https://github.com/netwide-assembler/nasm
       - name: Make Manpages (Hotfix for NASM)
-        run: make manpages
+        run: make man-pages
       - name: Install NASM
         run: cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
       - name: Download YASM
