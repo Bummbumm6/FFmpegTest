@@ -13,4 +13,4 @@ jobs:
     container: fedora:41
 
     steps:
-      - run: ls
+      - run: yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel
