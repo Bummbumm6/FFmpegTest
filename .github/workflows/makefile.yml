@@ -20,7 +20,7 @@ jobs:
       - name: (Deps) Install NASM
         run: cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make all nasm.1 ndisasm.1 && make install
       - name: (Deps) Remove repo NASM
-        run: yum remove nasm && hash -d nasm
+        run: yum remove nasm
       - name: (Deps) Download YASM
         run: cd ~/ && git clone https://github.com/yasm/yasm
       - name: (Deps) Install YASM
@@ -28,7 +28,7 @@ jobs:
       - name: (Deps) Download libx264
         run: cd ~/ && git clone --branch stable --depth 1 https://code.videolan.org/videolan/x264.git
       - name: (Deps) Install libx264
-        run: cd ~/x264 && PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static && make && make install
+        run: cd ~/x264 && PATH=$PATH:/github/home/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ~/x264/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static && make && make install
       - name: (Deps) Download libx265
         run: cd ~/ && git clone --branch stable --depth 2 https://bitbucket.org/multicoreware/x265_git
       - name: (Deps) Install libx265
