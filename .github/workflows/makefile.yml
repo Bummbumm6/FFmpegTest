@@ -18,8 +18,8 @@ jobs:
       - name: Download NASM
         run: cd ~/ && git clone https://github.com/netwide-assembler/nasm
       - name: Install NASM
-        run: cd nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
+        run: cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
       - name: Download YASM
         run: cd ~/ && git clone https://github.com/yasm/yasm
       - name: Install YASM
-        run: cd yasm && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
+        run: cd ~/yasm && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
