@@ -14,11 +14,7 @@ jobs:
 
     steps:
       - run: yum install autoconf automake bzip2 bzip2-devel cmake freetype-devel gcc gcc-c++ git libtool make pkgconfig zlib-devel git -y
-      - run: git clone https://github.com/netwide-assembler/nasm
-      - run: cd nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
-      - run: make
-      - run: make install
+      - run: cd ~/ffmpeg_sources && git clone https://github.com/netwide-assembler/nasm
+      - run: cd nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
       - run: cd ~/ffmpeg_sources && git clone https://github.com/yasm/yasm
-      - run: cd yasm && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin"
-      - run: make
-      - run: make install
+      - run: cd yasm && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
