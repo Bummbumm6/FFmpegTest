@@ -22,4 +22,4 @@ jobs:
       - name: Download YASM
         run: cd ~/ && git clone https://github.com/yasm/yasm
       - name: Install YASM
-        run: cd ~/yasm && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
+        run: cd ~/yasm && ~/yasm/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
