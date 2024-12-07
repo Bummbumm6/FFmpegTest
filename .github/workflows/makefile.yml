@@ -24,4 +24,4 @@ jobs:
       - name: Build libx265
         run: cd ~/ && git clone --branch stable --depth 2 https://bitbucket.org/multicoreware/x265_git && cd ~/x265_git/build/linux && PATH=$PATH:$HOME/bin cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ~/x265_git/source && PATH=$PATH:$HOME/bin make && PATH=$PATH:$HOME/bin make install
       - name: Build libfdk_aac
-        run: cd ~/ && git clone --depth 1 https://github.com/mstorsjo/fdk-aac && cd ~/fdk-aac && PATH=$PATH:$HOME/bin ~/fdk-aac/autoreconf -fiv && PATH=$PATH:$HOME/bin ~/fdk-aac/configure --prefix="$HOME/ffmpeg_build" --disable-shared && PATH=$PATH:$HOME/bin make && PATH=$PATH:$HOME/bin make install
+        run: cd ~/ && git clone --depth 1 https://github.com/mstorsjo/fdk-aac && cd ~/fdk-aac && PATH=$PATH:$HOME/bin autoreconf -fiv && PATH=$PATH:$HOME/bin ~/fdk-aac/configure --prefix="$HOME/ffmpeg_build" --disable-shared && PATH=$PATH:$HOME/bin make && PATH=$PATH:$HOME/bin make install
