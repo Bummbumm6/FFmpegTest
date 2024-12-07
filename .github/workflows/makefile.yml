@@ -21,5 +21,7 @@ jobs:
         run: cd ~/nasm && ./autogen.sh && ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make all nasm.1 ndisasm.1 && make install
       - name: Download YASM
         run: cd ~/ && git clone https://github.com/yasm/yasm
+      - name: Generate YASM Autotools
+        run: ./autogen.sh
       - name: Install YASM
         run: cd ~/yasm && ~/yasm/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && make && make install
