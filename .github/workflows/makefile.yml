@@ -85,9 +85,17 @@ jobs:
           PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
           PATH=$PATH:$HOME/bin make
           PATH=$PATH:$HOME/bin make install
+      - name: Build libmpg123
+        run: |
+          cd ~/
+          git clone https://github.com/madebr/mpg123
+          cd mpg123
+          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static
+          PATH=$PATH:$HOME/bin make
+          PATH=$PATH:$HOME/bin make install
       - name: Build FFmpeg
         run: |
-          cd ~
+          cd ~/
           curl -O -L https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
           tar xjvf ffmpeg-snapshot.tar.bz2
           cd ffmpeg
