@@ -66,6 +66,7 @@ jobs:
           cd ~/
           git clone https://github.com/madebr/mpg123
           cd mpg123
+          PATH=$PATH:$HOME/bin autoreconf -fiv
           PATH=$PATH:$HOME/bin ~/mpg123/configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static
           PATH=$PATH:$HOME/bin make
           PATH=$PATH:$HOME/bin make install
@@ -74,7 +75,7 @@ jobs:
           cd ~/
           git clone https://github.com/despoa/LAME
           cd LAME
-          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --disable-shared --enable-nasm
+          PATH=$PATH:$HOME/bin ~/LAME/configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --disable-shared --enable-nasm
           PATH=$PATH:$HOME/bin make
           PATH=$PATH:$HOME/bin make install
       - name: Build libopus
@@ -82,7 +83,7 @@ jobs:
           cd ~/
           git clone https://github.com/xiph/opus
           cd opus
-          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --disable-shared
+          PATH=$PATH:$HOME/bin ~/opus/configure --prefix="$HOME/ffmpeg_build" --disable-shared
           PATH=$PATH:$HOME/bin make
           PATH=$PATH:$HOME/bin make install
       - name: Build libvpx
@@ -90,7 +91,7 @@ jobs:
           cd ~/
           git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git
           cd libvpx
-          PATH=$PATH:$HOME/bin ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
+          PATH=$PATH:$HOME/bin ~/libvpx/configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
           PATH=$PATH:$HOME/bin make
           PATH=$PATH:$HOME/bin make install
       - name: Build FFmpeg
@@ -98,7 +99,7 @@ jobs:
           cd ~/
           curl -O -L https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
           tar xjvf ffmpeg-snapshot.tar.bz2
-          cd ffmpeg
+          cd ~/ffmpeg
           PATH=$PATH:$HOME/bin PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
             --prefix="$HOME/ffmpeg_build" \
             --pkg-config-flags="--static" \
