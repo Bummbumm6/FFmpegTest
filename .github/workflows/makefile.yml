@@ -66,7 +66,7 @@ jobs:
           cd ~/
           git clone https://github.com/madebr/mpg123
           cd mpg123
-          PATH=$PATH:$HOME/bin ~/mpg124/configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static
+          PATH=$PATH:$HOME/bin ~/mpg123/configure --prefix="$HOME/ffmpeg_build" --disable-shared --enable-static
           PATH=$PATH:$HOME/bin make
           PATH=$PATH:$HOME/bin make install
       - name: Build libmp3lame
